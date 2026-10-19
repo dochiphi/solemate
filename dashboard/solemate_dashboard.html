@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solemate Dashboard</title>
+<style>
+  :root { --bg:#0f1115; --card:#1a1d24; --line:#2a2e38; --txt:#f2f4f8; --mut:#9aa0ad; --ok:#1d9e75; --warn:#ef9f27; --fall:#e24b4a; --sos:#8a2420; --accent:#378add; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,sans-serif; background:var(--bg); color:var(--txt); -webkit-text-size-adjust:100%; }
+  .wrap { max-width:480px; margin:0 auto; padding:20px 16px 40px; }
+  header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+  h1 { font-size:22px; font-weight:600; margin:0; }
+  h2 { font-size:16px; font-weight:600; margin:24px 0 10px; color:var(--mut); }
+  .dot { width:12px; height:12px; border-radius:50%; background:#555; display:inline-block; margin-right:7px; vertical-align:middle; }
+  .dot.on { background:var(--ok); }
+  .status-txt { font-size:14px; color:var(--mut); }
+  button { width:100%; padding:16px; font-size:17px; font-weight:600; border:0; border-radius:12px; color:#fff; cursor:pointer; }
+  .btn-connect { background:var(--accent); margin-bottom:16px; }
+  .btn-nav { background:#2a2e38; margin-top:8px; }
+  .btn-back { background:#2a2e38; margin-bottom:16px; }
+  .btn-cancel { background:#fff; color:var(--fall); margin-top:16px; }
+  button:disabled { opacity:.4; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; margin-bottom:14px; }
+  .label { font-size:14px; color:var(--mut); margin-bottom:6px; }
+  .big { font-size:38px; font-weight:700; line-height:1; }
+  .unit { font-size:17px; color:var(--mut); font-weight:400; }
+  .tiles { display:flex; gap:12px; }
+  .tiles .card { flex:1; margin-bottom:0; }
+  .health { border-radius:16px; padding:20px; margin-bottom:14px; text-align:center; }
+  .health.ok { background:#12463a; }
+  .health.warn { background:#4a3410; }
+  .health.caution { background:var(--sos); }
+  .health .st { font-size:30px; font-weight:700; letter-spacing:.5px; }
+  .health .ms { font-size:14px; opacity:.9; margin-top:6px; }
+  .alert { display:none; border-radius:16px; padding:22px; text-align:center; margin-bottom:14px; }
+  .alert.show { display:block; }
+  .alert.fall { background:var(--fall); }
+  .alert.sossent { background:var(--sos); }
+  .alert .t { font-size:24px; font-weight:700; }
+  .alert .s { font-size:15px; opacity:.95; margin-top:6px; }
+  .alert .count { font-size:38px; font-weight:700; margin:6px 0; }
+  .alert .note { font-size:14px; opacity:.9; margin-top:10px; }
+  .footmap { display:flex; gap:16px; align-items:center; }
+  .readout { flex:1; }
+  .row { display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-bottom:1px solid var(--line); font-size:14px; }
+  .row:last-child { border-bottom:0; }
+  .row .nm { color:var(--mut); }
+  .row .vl { font-weight:600; font-variant-numeric:tabular-nums; }
+  .chart { width:100%; height:120px; background:#13161c; border-radius:10px; }
+  .summary { font-size:15px; line-height:1.6; }
+  .learn { color:var(--accent); font-size:14px; margin-top:14px; cursor:pointer; }
+  .learn-body { display:none; font-size:13px; color:var(--mut); line-height:1.6; margin-top:10px; }
+  .learn-body.show { display:block; }
+  .foot { font-size:13px; color:var(--mut); text-align:center; margin-top:8px; }
+  .hidden { display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== PAGE 1: DASHBOARD ===== -->
+  <div id="page1">
+    <header>
+      <h1>Solemate</h1>
+      <div><span class="dot" id="dot"></span><span class="status-txt" id="conn">Disconnected</span></div>
+    </header>
+
+    <button class="btn-connect" id="btn">Connect to insole</button>
+
+    <div class="alert" id="alert">
+      <div class="t" id="alertTitle">FALL DETECTED</div>
+      <div class="count" id="alertCount"></div>
+      <div class="s" id="alertSub"></div>
+      <div class="note" id="emailNote"></div>
+      <button class="btn-cancel" id="cancelBtn">Cancel alert, I'm OK</button>
+    </div>
+
+    <div class="health ok" id="health">
+      <div class="st" id="healthSt">--</div>
+      <div class="ms" id="healthMs">Connect to begin monitoring</div>
+    </div>
+
+    <div class="tiles">
+      <div class="card">
+        <div class="label">Force</div>
+        <div><span class="big" id="force">--</span> <span class="unit">g</span></div>
+      </div>
+      <div class="card">
+        <div class="label">Temp</div>
+        <div><span class="big" id="temp">--</span> <span class="unit">&deg;C</span></div>
+      </div>
+      <div class="card">
+        <div class="label">Steps</div>
+        <div><span class="big" id="steps">--</span></div>
+      </div>
+    </div>
+
+    <button class="btn-nav" id="toAnalysis">Check your health analysis</button>
+    <div class="foot" id="updated">No data yet</div>
+  </div>
+
+  <!-- ===== PAGE 2: HEALTH ANALYSIS ===== -->
+  <div id="page2" class="hidden">
+    <button class="btn-back" id="back">&larr; Back to dashboard</button>
+    <h1>Health analysis</h1>
+
+    <div class="health ok" id="health2">
+      <div class="st" id="healthSt2">--</div>
+      <div class="ms" id="healthMs2"></div>
+    </div>
+
+    <h2>Temperature</h2>
+    <div class="card">
+      <svg class="chart" id="tempChart" viewBox="0 0 300 120" preserveAspectRatio="none">
+        <polyline id="tempLine" fill="none" stroke="#ef9f27" stroke-width="2" points=""/>
+      </svg>
+    </div>
+
+    <h2>Pressure</h2>
+    <div class="card">
+      <svg class="chart" id="pressChart" viewBox="0 0 300 120" preserveAspectRatio="none">
+        <polyline id="pressLine" fill="none" stroke="#378add" stroke-width="2" points=""/>
+      </svg>
+    </div>
+
+    <div class="card">
+      <div class="footmap">
+        <svg width="120" viewBox="0 0 220 400" aria-label="Foot pressure map">
+          <path d="M110 18 Q165 18 172 80 Q178 130 162 182 Q155 215 160 255 Q168 312 150 356 Q135 394 100 396 Q62 394 52 356 Q42 316 50 272 Q57 232 48 188 Q40 138 50 84 Q60 22 110 18 Z"
+                fill="#20242d" stroke="#3a4050" stroke-width="1.5"/>
+          <circle id="c4" cx="62"  cy="70"  r="24" fill="#2a3550" stroke="#3a4050" stroke-width="1.5"/>
+          <circle id="c2" cx="78"  cy="150" r="24" fill="#2a3550" stroke="#3a4050" stroke-width="1.5"/>
+          <circle id="c3" cx="140" cy="162" r="24" fill="#2a3550" stroke="#3a4050" stroke-width="1.5"/>
+          <circle id="c1" cx="100" cy="320" r="28" fill="#2a3550" stroke="#3a4050" stroke-width="1.5"/>
+        </svg>
+        <div class="readout">
+          <div class="row"><span class="nm">Heel</span><span class="vl" id="v1">--</span></div>
+          <div class="row"><span class="nm">Ball, inner</span><span class="vl" id="v2">--</span></div>
+          <div class="row"><span class="nm">Ball, outer</span><span class="vl" id="v3">--</span></div>
+          <div class="row"><span class="nm">Big toe</span><span class="vl" id="v4">--</span></div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Summary</h2>
+    <div class="card">
+      <div class="summary" id="summary">Connect and move around to build your analysis.</div>
+      <div class="learn" id="learnBtn">Learn how we analyze your health &rsaquo;</div>
+      <div class="learn-body" id="learnBody">
+        Solemate watches three signals. Motion from the accelerometer detects falls and counts steps.
+        Temperature compares the two feet; a sustained difference above about 2&deg;C can be an early sign of
+        inflammation. Pressure shows how weight is spread across the foot, flagging uneven loading.
+        This prototype shows one foot, so the health status here is a simplified demonstration based on
+        pressure balance; the production device uses left-vs-right temperature asymmetry.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  const SERVICE = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
+  const TX_CHAR = '6e400003-b5a3-f393-e0a9-e50e24dcca9e';
+  const RX_CHAR = '6e400002-b5a3-f393-e0a9-e50e24dcca9e';
+
+  const EMAILJS_SERVICE  = 'service_43o8k0l';
+  const EMAILJS_TEMPLATE = 'template_isp8e0w';
+  const EMAILJS_PUBLIC   = 'Y5SxwZjVt3Sphm943';
+  const SOS_TO           = 'dochiphi2208@gmail.com';
+  if (window.emailjs) emailjs.init({ publicKey: EMAILJS_PUBLIC });
+
+  const $ = id => document.getElementById(id);
+  const names = ['Heel', 'Ball (inner)', 'Ball (outer)', 'Big toe'];
+
+  let device = null, rxChar = null;
+  let lastStatus = 'OK', lastForce = 0;
+  let tempHist = [], pressHist = [];
+  const HIST = 48;
+
+  $('btn').addEventListener('click', connect);
+  $('cancelBtn').addEventListener('click', () => sendCmd('CANCEL'));
+  $('toAnalysis').addEventListener('click', () => { $('page1').classList.add('hidden'); $('page2').classList.remove('hidden'); });
+  $('back').addEventListener('click', () => { $('page2').classList.add('hidden'); $('page1').classList.remove('hidden'); });
+  $('learnBtn').addEventListener('click', () => $('learnBody').classList.toggle('show'));
+
+  function heatColor(v) {
+    const t = Math.min(1, v / 1500);
+    return 'rgb(' + Math.round(42 + t*(226-42)) + ',' + Math.round(53 + t*(75-53)) + ',' + Math.round(80 + t*(74-80)) + ')';
+  }
+
+  function setHealth(s) {
+    const map = { HEALTHY:['ok','Everything looks normal'], WARNING:['warn','Uneven loading, keep an eye on it'], CAUTION:['caution','Please check with a clinician'] };
+    const m = map[s] || map.HEALTHY;
+    ['health','health2'].forEach(id => $(id).className = 'health ' + m[0]);
+    $('healthSt').textContent = s; $('healthSt2').textContent = s;
+    $('healthMs').textContent = m[1]; $('healthMs2').textContent = m[1];
+  }
+
+  function drawChart(lineId, data, lo, hi) {
+    const w = 300, h = 120, pad = 8;
+    if (data.length < 2) { $(lineId).setAttribute('points', ''); return; }
+    const n = data.length;
+    const pts = data.map((v, i) => {
+      const x = pad + (i/(n-1))*(w-2*pad);
+      const t = Math.max(0, Math.min(1, (v-lo)/(hi-lo)));
+      const y = h - pad - t*(h-2*pad);
+      return x.toFixed(1) + ',' + y.toFixed(1);
+    }).join(' ');
+    $(lineId).setAttribute('points', pts);
+  }
+
+  async function connect() {
+    if (!navigator.bluetooth) { $('conn').textContent = 'Web Bluetooth not supported'; return; }
+    try {
+      $('conn').textContent = 'Scanning...';
+      device = await navigator.bluetooth.requestDevice({ filters: [{ name: 'Solemate' }], optionalServices: [SERVICE] });
+      device.addEventListener('gattserverdisconnected', onDisconnect);
+      const server = await device.gatt.connect();
+      const service = await server.getPrimaryService(SERVICE);
+      const tx = await service.getCharacteristic(TX_CHAR);
+      rxChar = await service.getCharacteristic(RX_CHAR);
+      await tx.startNotifications();
+      tx.addEventListener('characteristicvaluechanged', onData);
+      $('dot').classList.add('on'); $('conn').textContent = 'Connected';
+      $('btn').textContent = 'Connected'; $('btn').disabled = true;
+    } catch (e) { $('conn').textContent = 'Connection failed, tap to retry'; }
+  }
+
+  async function sendCmd(cmd) {
+    if (!rxChar) return;
+    try { await rxChar.writeValue(new TextEncoder().encode(cmd)); }
+    catch (e) { $('conn').textContent = 'Command failed'; }
+  }
+
+  function sendSosEmail() {
+    if (!window.emailjs) { $('emailNote').textContent = 'Email library not loaded'; return; }
+    $('emailNote').textContent = 'Sending email...';
+    emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+      to_email: SOS_TO, alert_time: new Date().toLocaleString(), force: lastForce.toFixed(2)
+    }).then(() => { $('emailNote').textContent = 'SOS email sent to ' + SOS_TO; })
+      .catch((err) => {
+        const code = (err && (err.status || err.code)) || '?';
+        const txt = (err && (err.text || err.message)) || JSON.stringify(err);
+        $('emailNote').textContent = 'Email failed [' + code + ']: ' + txt;
+      });
+  }
+
+  function onData(ev) {
+    const text = new TextDecoder().decode(ev.target.value);
+    const p = {};
+    text.split(',').forEach(x => { const i = x.indexOf(':'); if (i > 0) p[x.slice(0,i)] = x.slice(i+1); });
+
+    if (p.F !== undefined) {
+      const f = parseFloat(p.F); lastForce = f;
+      $('force').textContent = f.toFixed(2);
+    }
+    if (p.T !== undefined) {
+      const t = parseFloat(p.T);
+      $('temp').textContent = t.toFixed(1);
+      tempHist.push(t); if (tempHist.length > HIST) tempHist.shift();
+      drawChart('tempLine', tempHist, 20, 40);
+    }
+    if (p.ST !== undefined) $('steps').textContent = parseInt(p.ST).toLocaleString();
+
+    const pr = [p.P1, p.P2, p.P3, p.P4].map(v => v === undefined ? 0 : parseInt(v));
+    if (p.P1 !== undefined) {
+      pr.forEach((v, i) => {
+        $('c' + (i+1)).setAttribute('fill', heatColor(v));
+        $('v' + (i+1)).textContent = v;
+      });
+      const total = pr.reduce((a,b) => a+b, 0);
+      pressHist.push(total); if (pressHist.length > HIST) pressHist.shift();
+      drawChart('pressLine', pressHist, 0, Math.max(500, ...pressHist));
+
+      // illustrative health status from pressure imbalance (prod = temp asymmetry)
+      const spread = Math.max(...pr) - Math.min(...pr);
+      setHealth(spread > 1200 ? 'CAUTION' : spread > 600 ? 'WARNING' : 'HEALTHY');
+
+      const peak = names[pr.indexOf(Math.max(...pr))];
+      $('summary').innerHTML = 'Highest pressure at the <b>' + peak.toLowerCase() +
+        '</b>. Foot temperature <b>' + (p.T ? parseFloat(p.T).toFixed(1) : '--') + '&deg;C</b>. ' +
+        'Step count <b>' + (p.ST ? parseInt(p.ST).toLocaleString() : '0') + '</b>.';
+    }
+
+    const s = p.S;
+    if (s === 'FALL') {
+      $('alert').className = 'alert show fall';
+      $('alertTitle').textContent = 'FALL DETECTED';
+      $('alertCount').textContent = (p.C || '0') + 's';
+      $('alertSub').textContent = 'Sending SOS unless cancelled';
+      $('emailNote').textContent = '';
+      $('cancelBtn').style.display = 'block';
+    } else if (s === 'SOS') {
+      $('alert').className = 'alert show sossent';
+      $('alertTitle').textContent = 'SOS SENT';
+      $('alertCount').textContent = '';
+      $('alertSub').textContent = 'Emergency alert triggered';
+      $('cancelBtn').style.display = 'none';
+      if (lastStatus !== 'SOS') sendSosEmail();
+    } else {
+      $('alert').className = 'alert';
+    }
+    lastStatus = s;
+    $('updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+  }
+
+  function onDisconnect() {
+    $('dot').classList.remove('on'); $('conn').textContent = 'Disconnected';
+    $('btn').textContent = 'Reconnect to insole'; $('btn').disabled = false; rxChar = null;
+  }
+</script>
+</body>
+</html>
