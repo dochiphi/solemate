@@ -99,6 +99,7 @@ Tested on the bench by hand (shaking or tapping the IMU, pressing the sensors). 
 ![soldering](media/videos/soldering.gif)
 
 I am the lead engineer. I built the working prototype. I simulated the circuit in Wokwi, wired and tested the ESP32 and sensors on a breadboard, wrote and debugged the firmware, set up the Bluetooth dashboard with the fall alert and email, and worked on the insole layout and CAD in SolidWorks.
+
 Team members: Ethan Do, Lucy Huynh, Nethera Nguyen, Emma Vo, and Paul Phan.
 
 ## Repo layout
