@@ -45,7 +45,7 @@ Common devices like SOS wristbands, cameras, and bed sensors are easy to forget,
 
 ## How it works
 
-![CAD](media/photos/layout.jpeg)
+![CAD](media/photos/layout.png)
 ![Wiring](media/photos/wiring.jpeg)
 1. **Sense.** The ESP32 reads the IMU, the 4 pressure sensors, and the temperature sensor.
 2. **Detect a fall.** A fall is a sudden spike above 2.5 g followed by about 2 seconds of stillness. If the user keeps moving within 15 seconds after the spike, it is treated as a stumble, not a fall.
