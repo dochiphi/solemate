@@ -57,6 +57,10 @@ Demo settings: the countdown is 10 seconds (target is 30) and the temperature ga
 
 ## Results
 
+### Dashboard
+![Dashboard 1](media/photos/dashboard1.jpeg)
+![Dashboard 2](media/photos/dashboard2.jpeg)
+
 Tested on the bench by hand (shaking or tapping the IMU, pressing the sensors). No tests with real falls, real users, or shoes.
 
 | Requirement | Result | Notes |
