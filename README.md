@@ -2,7 +2,7 @@
 
 A smart insole prototype that detects falls and tracks foot pressure and temperature, built for the 2026 UC 1819 Innovation Hub Challenge.
 
-![Prototype view 1](media/photos/1.png)
+![Prototype view 1](media/photos/prototype.jpeg)
 
 ## Problem and goal
 
@@ -45,8 +45,8 @@ Common devices like SOS wristbands, cameras, and bed sensors are easy to forget,
 
 ## How it works
 
-![CAD](media/photos/layout.png)
-![Wiring](media/photos/wiring.png)
+![CAD](media/photos/layout.jpeg)
+![Wiring](media/photos/wiring.jpeg)
 1. **Sense.** The ESP32 reads the IMU, the 4 pressure sensors, and the temperature sensor.
 2. **Detect a fall.** A fall is a sudden spike above 2.5 g followed by about 2 seconds of stillness. If the user keeps moving within 15 seconds after the spike, it is treated as a stumble, not a fall.
 3. **Warn.** The motor vibrates and a countdown starts on the phone. The user can cancel it in the dashboard.
