@@ -3,7 +3,7 @@
 A smart insole prototype that detects falls and tracks foot pressure and temperature, built for the Fall 2026 UC CEAS Innovation Challenge.
 
 ![Prototype view 1](media/photos/prototype.jpeg)
-![quickdemo](media/videos/quickdemo.gif)
+![quickdemo](media/videos/soldering.gif)
 
 ## Problem and goal
 
