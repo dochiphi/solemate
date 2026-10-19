@@ -19,6 +19,7 @@ Common devices like SOS wristbands, cameras, and bed sensors are easy to forget,
 
 ### Current prototype (one foot, breadboard, USB powered)
 
+![Breadboard](media/photos/breadboard.jpeg)
 | Part | Use | ESP32 pin |
 | --- | --- | --- |
 | ESP32 dev board | Main controller, built-in Bluetooth Low Energy (BLE) | |
