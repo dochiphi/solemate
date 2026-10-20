@@ -84,6 +84,48 @@ Tested on the bench by hand (shaking or tapping the IMU, pressing the sensors). 
 | Water resistance | Not tested | Not built. |
 | Works on both feet | Not tested | Only one foot built. |
 
+## Testing and Data Logging
+
+### Automated tests
+The fall-detection rules from `firmware/hardware/Solemate.ino` are mirrored in a Python model (`tests/fall_detect.py`) and checked with Pytest. Tests cover:
+- Impact threshold (above 2.5 g)
+- Stillness band (0.8 to 1.2 g, inclusive) and the "more than 2 s" rule
+- The 15 s give-up timer after an impact
+- Parsing of the ESP32 serial output, including broken lines
+
+Tests run automatically on every push through GitHub Actions.
+
+    py -m pip install pytest
+    py -m pytest -v
+
+> Note: the tests check the Python model, not the C++ firmware directly. If the firmware thresholds change, `tests/fall_detect.py` must be updated to match.
+
+### Data logging
+`datalog/` records test sessions from the ESP32 over USB into a SQLite database, then analyzes them with SQL.
+
+| File | Purpose |
+|---|---|
+| `parse.py` | Turns one serial line into data (readings or events) |
+| `db.py` | Creates the database: `sessions`, `readings`, `events` |
+| `logger.py` | Logs a live session from the device, or from a fake file |
+| `queries.py` | SQL analysis: detections vs real falls, false alarms, pressure, temperature |
+| `make_fake.py` | Generates fake sessions for testing without hardware |
+
+**Log a session** (press Ctrl+C to stop):
+
+    py -m pip install pyserial
+    py datalog\logger.py --label walking --port COM4
+    py datalog\logger.py --label fake_fall --real-fall --port COM4
+
+**Analyze:**
+
+    py datalog\queries.py
+
+Each session records whether a fall was actually staged (`--real-fall`), so the queries can compare what really happened against what the device detected.
+
+### Results
+Testing in progress. Results will be added after the real test sessions.
+
 ## What I learned
 
 - **Start from the real power budget.** Piezoelectric harvesting from walking cannot power the insole on its own, so I switched to a battery with a charging circuit and a charging dock.
