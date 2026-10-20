@@ -152,4 +152,6 @@ dashboard/   Web Bluetooth dashboard
 cad/         SolidWorks files and STL exports
 docs/        proposal deck and project document
 media/       photos, videos, diagrams
+datalog/     datalogging helpers
+tests/       data testing helpers
 ```
