@@ -143,8 +143,10 @@ Testing in progress. Results will be added after the real test sessions.
 - **Phone limits matter.** Safari on iPhone does not support Web Bluetooth, so the demo uses the Bluefy browser.
 
 ## My role
-
-![soldering](media/videos/soldering.gif)
+<p align="center">
+  <img src="media/videos/soldering.gif" width="600">
+</p>
+<p align="center">
 
 I am the lead engineer. I built the working prototype. I simulated the circuit in Wokwi, wired and tested the ESP32 and sensors on a breadboard, wrote and debugged the firmware, set up the Bluetooth dashboard with the fall alert and email, and worked on the insole layout and CAD in SolidWorks.
 
