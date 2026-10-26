@@ -1,6 +1,6 @@
 # Solemate
 
-A smart insole prototype that detects falls and tracks foot pressure and temperature, built for the Fall 2026 UC CEAS Innovation Challenge.
+A smart insole prototype that detects falls and predicts ulcer risk for diabetic patient by tracking foot pressure and temperature, built for the Fall 2026 UC CEAS Innovation Challenge.
 <p align="center">
   <img src="media/photos/prototype.jpeg" width="480">
 </p>
