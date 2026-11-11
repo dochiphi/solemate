@@ -1,6 +1,9 @@
 # Solemate
 
 A smart insole prototype that detects falls and predicts ulcer risk for diabetic patient by tracking foot pressure and temperature, built for the Fall 2026 UC CEAS Innovation Challenge.
+
+[![Watch the Solemate demo](https://img.youtube.com/vi/x8EfPnmHeWM/maxresdefault.jpg)](https://www.youtube.com/watch?v=x8EfPnmHeWM)
+
 <p align="center">
   <img src="media/photos/prototype.jpeg" width="480">
 </p>
@@ -35,6 +38,7 @@ Common devices like SOS wristbands, cameras, and bed sensors are easy to forget,
 | Vibration motor + transistor driver | Buzzes to warn the user | 5 |
 
 ### Planned for the wearable version (designed, not built)
+![Branding](media/photos/branding.png)
 
 - XIAO ESP32-S3 in place of the dev board, to fit inside an insole
 - LiPo battery with TP4056 charging circuit, PTC fuse
