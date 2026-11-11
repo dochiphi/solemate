@@ -58,6 +58,7 @@ Common devices like SOS wristbands, cameras, and bed sensors are easy to forget,
 ### Dashboard
 
 ![Dashboard](media/photos/dashboard.png)
+![DashboardWarning](media/photos/warning.png)
 
 The planned user interface is designed to be an application. For the prototype, I developed an html website hosted by Netlify: https://thesolemate.netlify.app/
 
