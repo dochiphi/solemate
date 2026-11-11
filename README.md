@@ -55,6 +55,12 @@ Common devices like SOS wristbands, cameras, and bed sensors are easy to forget,
 - EmailJS (sends the SOS email from the dashboard)
 - SolidWorks (insole and enclosure CAD)
 
+### Dashboard
+
+![Dashboard](media/photos/dashboard.png)
+
+The planned user interface is designed to be an application. For the prototype, I developed an html website hosted by Netlify: https://thesolemate.netlify.app/
+
 ## How it works
 
 ![CAD](media/photos/layout.png)
