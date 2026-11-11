@@ -20,6 +20,9 @@ Falls are a leading cause of injury and death for older adults, and many falls a
 
 Common devices like SOS wristbands, cameras, and bed sensors are easy to forget, have blind spots, raise privacy concerns, or only react after something has happened.
 
+![Parkinson](media/photos/parkinson.jpg)
+![Neuropathy](media/photos/neuro.jpg)
+
 **Goal:** an insole that slips into the user's own shoes and:
 1. Detects a fall and sends an alert if the user does not respond.
 2. Watches for a lasting temperature difference between the left and right foot, an early warning sign of diabetic foot problems.
