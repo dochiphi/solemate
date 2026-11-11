@@ -38,7 +38,7 @@ Common devices like SOS wristbands, cameras, and bed sensors are easy to forget,
 | Vibration motor + transistor driver | Buzzes to warn the user | 5 |
 
 ### Planned for the wearable version (designed, not built)
-![Branding](media/photos/branding.png)
+![Branding](media/photos/brandingIdea.png)
 
 - XIAO ESP32-S3 in place of the dev board, to fit inside an insole
 - LiPo battery with TP4056 charging circuit, PTC fuse
